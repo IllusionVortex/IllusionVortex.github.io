@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illusion Vortex - The Dark Order Traker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b0c10;
+            color: #c5c6c7;
+            text-align: center;
+            padding: 50px;
+        }
+        .counter-container {
+            background-color: #1f2833;
+            border: 2px solid #45f3ff;
+            border-radius: 15px;
+            display: inline-block;
+            padding: 40px 60px;
+            box-shadow: 0 0 20px rgba(69, 243, 255, 0.2);
+        }
+        h1 {
+            color: #45f3ff;
+            margin-bottom: 5px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(69, 243, 255, 0.5);
+        }
+        p {
+            color: #66fcf1;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+        .count {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-top: 20px;
+        }
+        .loading {
+            color: #888;
+            font-style: italic;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="counter-container">
+        <h1>Illusion Vortex</h1>
+        <p>Member Count</p>
+        <div id="member-count" class="count loading">Fetching...</div>
+    </div>
+
+    <script>
+        const clubSlug = 'The-Dark-Order-sidebar-club'; 
+        const apiUrl = `https://chess.com{clubSlug}`;
+
+        async function fetchMemberCount() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error('API failed');
+                const data = await response.json();
+                
+                const countElement = document.getElementById('member-count');
+                countElement.classList.remove('loading');
+                countElement.innerText = data.members_count.toLocaleString();
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('member-count').innerText = "Offline";
+            }
+        }
+
+        fetchMemberCount();
+        // Refresh the count automatically every 60 seconds
+        setInterval(fetchMemberCount, 60000);
+    </script>
+</body>
+</html>
